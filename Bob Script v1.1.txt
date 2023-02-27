@@ -1,0 +1,104 @@
+Options:
+	B: <gold>[<light aqua>BobDuel<gold>] &a
+	
+	
+	
+command /bobloc <text>:
+	description: Set BoB tourney locations
+	permission: bobduel.skript
+	trigger:
+		if arg-1 is "loc1":
+			set {bobLocOne} to player's location
+			message "{@B}You set &7Location &bone&a."
+		if arg-1 is "loc2":
+			set {bobLocTwo} to player's location
+			message "{@B}You set &7Location &ctwo&a."
+		if arg-1 is "reset" or "delete":
+			delete {bobLocOne}
+			delete {bobLocTwo}
+			message "{B} Locations are &breset&a."
+			
+command /bobduel <player> <player>:
+	description: Starts BoB 1v1 Battle
+	permission: bobduel.skript
+	trigger:
+		if {bobDuel} is not set:
+			set {bobPlayerOne} to arg-1
+			set {bobPlayerTwo} to arg-2
+			clear {bobPlayerOne}'s inventory
+			heal {bobPlayerOne} by 10 hearts
+			apply slowness 7 to {bobPlayerOne} for 3 seconds
+			apply jump boost 128 to {bobPlayerOne} for 3 seconds
+			apply regeneration 100 to {bobPlayerOne} for 3 seconds
+			apply saturation 100 to {bobPlayerOne} for 100 minutes
+			equip {bobPlayerOne} with iron helmet
+			equip {bobPlayerOne} with iron chestplate
+			equip {bobPlayerOne} with iron leggings
+			equip {bobPlayerOne} with iron boots
+			give {bobPlayerOne} diamond sword
+			give {bobPlayerOne} bow of infinity 1
+			give {bobPlayerOne} water bucket
+			give {bobPlayerOne} lava bucket
+			give {bobPlayerOne} flint and steel
+			give {bobPlayerOne} 64 cobblestone
+			give {bobPlayerOne} iron pickaxe
+			give {bobPlayerOne} iron shovel
+			give {bobPlayerOne} 1 arrow
+			clear {bobPlayerTwo}'s inventory
+			heal {bobPlayerTwo} by 10 hearts
+			apply slowness 7 to {bobPlayerTwo} for 3 seconds
+			apply jump boost 128 to {bobPlayerTwo} for 3 seconds
+			apply regeneration 100 to {bobPlayerTwo} for 3 seconds
+			apply saturation 100 to {bobPlayerTwo} for 100 minutes
+			equip {bobPlayerTwo} with iron helmet
+			equip {bobPlayerTwo} with iron chestplate
+			equip {bobPlayerTwo} with iron leggings
+			equip {bobPlayerTwo} with iron boots
+			give {bobPlayerTwo} diamond sword
+			give {bobPlayerTwo} bow of infinity 1
+			give {bobPlayerTwo} water bucket
+			give {bobPlayerTwo} lava bucket
+			give {bobPlayerTwo} flint and steel
+			give {bobPlayerTwo} 64 cobblestone
+			give {bobPlayerTwo} iron pickaxe
+			give {bobPlayerTwo} iron shovel
+			give {bobPlayerTwo} 1 arrow			
+			teleport {bobPlayerOne} to {bobLocOne}
+			teleport {bobPlayerTwo} to {bobLocTwo}
+			broadcast "{@B}&c%{bobPlayerOne}% &avs &9%{bobPlayerTwo}%"
+			broadcast "{@B}&7Starting in &c3"
+			wait 1 second
+			broadcast "{@B}&7Starting in &62"
+			wait 1 second 
+			broadcast "{@B}&7Starting in &a1"
+			wait 1 second
+			set {bobDuel} to true
+			broadcast "{@B}Go!"
+		else if {bobDuel} is set:
+			message "{@B}There is a duel in progress."
+			
+on death of player:
+	if {bobDuel} is set:
+		wait 2 seconds
+		if victim is {bobPlayerOne}:
+			broadcast "{@B}&6%{bobPlayerTwo}% &awins."
+			heal {bobPlayerTwo} by 10 hearts
+			clear {bobPlayerTwo}'s inventory
+			clear {bobPlayerOne}'s inventory
+			remove saturation from {bobPlayerTwo}
+			remove saturation from {bobPlayerOne}
+			execute console command "/spawn %{bobPlayerTwo}%"
+			delete {bobPlayerOne}
+			delete {bobPlayerTwo}
+			delete {bobDuel}
+		if victim is {bobPlayerTwo}:
+			broadcast "{@B}&6%{bobPlayerOne}% &awins."
+			heal {bobPlayerOne} by 10 hearts
+			clear {bobPlayerOne}'s inventory
+			clear {bobPlayerTwo}'s inventory
+			remove saturation from {bobPlayerTwo}
+			remove saturation from {bobPlayerOne}
+			execute console command "/spawn %{bobPlayerOne}%"
+			delete {bobPlayerOne}
+			delete {bobPlayerTwo}
+			delete {bobDuel}
